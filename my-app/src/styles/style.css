@@ -1,0 +1,91 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  /* LIGHT MODE (default) */
+  --bg:          #f0f0f4;
+  --bg2:         #ffffff;
+  --surface:     #ffffff;
+  --surface2:    #f5f5f8;
+  --surface3:    #ebebf0;
+  --border:      #e0e0e8;
+  --border2:     #d0d0da;
+
+  --accent:      #d4881a;
+  --accent-dim:  rgba(212,136,26,.10);
+  --accent-glow: rgba(212,136,26,.20);
+
+  --text:        #111118;
+  --text-2:      #6b6b80;
+  --text-3:      #a8a8b8;
+
+  --green:       #12a35a;
+  --green-dim:   rgba(18,163,90,.10);
+  --red:         #d63f3f;
+  --red-dim:     rgba(214,63,63,.10);
+  --blue:        #3a6fd8;
+  --blue-dim:    rgba(58,111,216,.10);
+  --purple:      #7a48d8;
+  --purple-dim:  rgba(122,72,216,.10);
+  --yellow:      #c49a10;
+  --yellow-dim:  rgba(196,154,16,.10);
+
+  --sidebar-w:   220px;
+  --topbar-h:    52px;
+  --radius:      10px;
+  --radius-sm:   6px;
+
+  font-size: 13px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* DARK MODE OVERRIDES */
+:root.Dark {
+  --bg:          #0d0d0f;
+  --bg2:         #111114;
+  --surface:     #18181c;
+  --surface2:    #1f1f25;
+  --surface3:    #26262e;
+  --border:      #2a2a35;
+  --border2:     #35353f;
+
+  --accent:      #f5a623;
+  --accent-dim:  rgba(245,166,35,.12);
+  --accent-glow: rgba(245,166,35,.25);
+
+  --text:        #f0f0f2;
+  --text-2:      #9898a8;
+  --text-3:      #55555f;
+
+  --green:       #22d47a;
+  --green-dim:   rgba(34,212,122,.12);
+  --red:         #f25757;
+  --red-dim:     rgba(242,87,87,.12);
+  --blue:        #5b8ef0;
+  --blue-dim:    rgba(91,142,240,.12);
+  --purple:      #a070f0;
+  --purple-dim:  rgba(160,112,240,.12);
+  --yellow:      #f5c842;
+  --yellow-dim:  rgba(245,200,66,.12);
+}
+
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: args(var(--bg) 1);
+}
+
+.app-layout {
+  display: flex;       /* sidebar + content side by side */
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;             /* takes all remaining space */
+  padding: 24px;
+}
+
+.page-placeholder {
+  background: var(--surface);
+  padding: 40px;
+  border-radius: 12px;
+}
