@@ -1,36 +1,47 @@
-// App.jsx — This is the ROOT of your app.
-// Think of it as the "main controller" that connects all your pages.
-
+// 📝 LEARN: useState is imported from react
+import { useState } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Sidebar from './components/sidebar'
 import Header from './components/header'
-import Footer from './components/footer'
 import Dashboard from './pages/dashboard'
 import Events from './pages/events'
 import Orders from './pages/orders'
 import Users from './pages/users'
-import './index.css'
 
 function App() {
-  return (
-    // BrowserRouter — enables page navigation without refreshing
-    <BrowserRouter>
 
-      {/* This div = sidebar on the LEFT, page content on the RIGHT */}
-      <div className="app-layout">
-        <Sidebar />  {/* This stays on every page */}
-        <div className="page-content">
-          <Header />  {/* This stays on every page */}
-          <div className="main-content">
-            {/* Routes = only ONE of these shows at a time depending on the URL */}
+  // 📝 LEARN: useState — stores isCollapsed (true = closed, false = open)
+  // true means collapsed by default (sidebar starts closed)
+  const [isCollapsed, setIsCollapsed] = useState(true)
+
+  // 📝 LEARN: This function flips the value
+  // prev = current value; !prev = opposite of it
+  const toggleSidebar = () => setIsCollapsed(prev => !prev)
+
+  return (
+    <BrowserRouter>
+      {/* Full screen layout: sidebar LEFT, content RIGHT */}
+      <div className="flex h-screen overflow-hidden" style={{ background: 'var(--bg)' }}>
+
+        {/* Sidebar — we pass isCollapsed so it knows what size to be */}
+        <Sidebar isCollapsed={isCollapsed} />
+
+        {/* Right side: header on top, page content below */}
+        <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
+          
+          {/* Header — we pass toggleSidebar so the button can trigger it */}
+          <Header onToggle={toggleSidebar} />
+
+          {/* Page content */}
+          <main className="flex-1 overflow-y-auto p-6">
             <Routes>
               <Route path="/"       element={<Dashboard />} />
               <Route path="/events" element={<Events />} />
               <Route path="/orders" element={<Orders />} />
               <Route path="/users"  element={<Users />} />
             </Routes>
-          </div>
-          <Footer />  {/* This stays on every page */}
+          </main>
+
         </div>
       </div>
     </BrowserRouter>
