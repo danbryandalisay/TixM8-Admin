@@ -124,15 +124,16 @@ function Sidebar({ isCollapsed }) {
               <NavLink
                 key={item.to}
                 to={item.to}
-                title={isCollapsed ? item.text : ''} // tooltip when collapsed
+                title={isCollapsed ? item.text : ''}
                 className={({ isActive }) =>
-                  `flex items-center gap-2 rounded-md text-xs font-medium cursor-pointer
-                   transition-all duration-150
-                   ${isActive ? 'active-nav' : ''}`
+                  `flex items-center rounded-md text-xs font-medium cursor-pointer transition-all duration-150
+                  ${isActive ? 'active-nav' : ''}`
                 }
+                // ✅ Fixed — icon stays left always, never moves
                 style={({ isActive }) => ({
-                  padding: isCollapsed ? '8px 0' : '8px 10px',
-                  justifyContent: isCollapsed ? 'center' : 'flex-start',
+                  padding: '8px 10px',           // ← same padding always
+                  justifyContent: 'flex-start',  // ← always left, icon never shifts
+                  gap: 8,                        // ← gap stays, text just fades to 0 width
                   color: isActive ? 'var(--accent)' : 'var(--text-2)',
                   background: isActive ? 'var(--accent-dim)' : 'transparent',
                 })}
@@ -145,21 +146,25 @@ function Sidebar({ isCollapsed }) {
                     e.currentTarget.style.background = 'transparent'
                 }}
               >
-                {/* Icon — always visible */}
-                <item.icon size={18} strokeWidth={1.8} />
+                {/* Icon — always visible, never shrinks */}
+                <item.icon size={18} strokeWidth={1.8} className="shrink-0" />
 
-                {/* Text — fades out when collapsed */}
+                {/* Text — smoothly hides when collapsed */}
+                {/* 📝 LEARN: max-w-0 + overflow-hidden is the cleanest way to animate text hiding */}
                 <span
-                  className="overflow-hidden whitespace-nowrap transition-all duration-300 flex-1"
-                  style={{ opacity: isCollapsed ? 0 : 1, width: isCollapsed ? 0 : 'auto' }}
+                  className="whitespace-nowrap overflow-hidden transition-all duration-300"
+                  style={{
+                    maxWidth: isCollapsed ? 0 : 200,   // ← collapses to 0 width smoothly
+                    opacity: isCollapsed ? 0 : 1,
+                  }}
                 >
                   {item.text}
                 </span>
 
-                {/* Badge */}
+                {/* Badge — only show when open */}
                 {item.badge && !isCollapsed && (
                   <span
-                    className="text-[9px] font-bold px-1.5 py-0.5 rounded-full"
+                    className="text-[9px] font-bold px-1.5 py-0.5 rounded-full ml-auto shrink-0"
                     style={{
                       background: item.badgeColor === 'blue'
                         ? 'var(--blue)'

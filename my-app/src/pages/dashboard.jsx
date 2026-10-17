@@ -29,7 +29,7 @@ const statusStyles = {
 
 function Dashboard() {
   return (
-    <div className="max-w-6xl">
+    <div className="max-w-full">
 
       {/* ── Page Header ── */}
       <div className="mb-6">
