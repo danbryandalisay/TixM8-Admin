@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import {
   LayoutDashboard,
@@ -13,10 +14,6 @@ import {
   Settings,
 } from 'lucide-react'
 
-// 📝 LEARN: Instead of storing a string like 'dashboard',
-// we store the actual icon component: LayoutDashboard
-// Then we render it dynamically below using <item.icon />
-
 const navSections = [
   {
     label: 'Overview',
@@ -28,18 +25,18 @@ const navSections = [
   {
     label: 'Platform',
     items: [
-      { to: '/operators', icon: Users,      text: 'Operators',    badge: '128', badgeColor: 'blue' },
-      { to: '/events',    icon: CalendarDays, text: 'All Events'                                   },
-      { to: '/orders',    icon: CreditCard,  text: 'Transactions'                                  },
-      { to: '/refunds',   icon: Undo2,       text: 'Refunds',      badge: '7',  badgeColor: 'red'  },
+      { to: '/operators', icon: Users,       text: 'Operators',    badge: '128', badgeColor: 'blue'   },
+      { to: '/events',    icon: CalendarDays, text: 'All Events'                                      },
+      { to: '/orders',    icon: CreditCard,  text: 'Transactions'                                     },
+      { to: '/refunds',   icon: Undo2,       text: 'Refunds',      badge: '7',   badgeColor: 'red'    },
     ],
   },
   {
     label: 'Administration',
     items: [
-      { to: '/users',       icon: UserCog,        text: 'Users & Roles'                               },
-      { to: '/permissions', icon: Lock,            text: 'Permissions'                                 },
-      { to: '/audit',       icon: ClipboardCheck,  text: 'Audit Log',  badge: '3', badgeColor: 'yellow'},
+      { to: '/users',       icon: UserCog,       text: 'Users & Roles'                                },
+      { to: '/permissions', icon: Lock,           text: 'Permissions'                                  },
+      { to: '/audit',       icon: ClipboardCheck, text: 'Audit Log',  badge: '3', badgeColor: 'yellow' },
     ],
   },
   {
@@ -51,13 +48,17 @@ const navSections = [
   },
 ]
 
-// 📝 LEARN: isCollapsed is a PROP — passed in from App.jsx
 function Sidebar({ isCollapsed }) {
+
+  // 📝 LEARN: useState stores the current tooltip to show
+  // null = no tooltip, { text, y } = show tooltip at that vertical position
+  const [tooltip, setTooltip] = useState(null)
+
   return (
     <aside
-      className="flex flex-col h-screen shrink-0 overflow-hidden transition-all duration-300 ease-in-out"
+      className="flex flex-col h-screen shrink-0 transition-all duration-300 ease-in-out"
       style={{
-        width: isCollapsed ? '52px' : '220px', // ← changes based on prop
+        width: isCollapsed ? '52px' : '220px',
         background: 'var(--bg2)',
         borderRight: '1px solid var(--border)',
       }}
@@ -72,7 +73,6 @@ function Sidebar({ isCollapsed }) {
           transition: 'padding 0.3s ease',
         }}
       >
-        {/* Brand icon — always visible */}
         <div
           className="flex items-center justify-center rounded-lg shrink-0"
           style={{ width: 30, height: 30, background: 'var(--accent)' }}
@@ -85,14 +85,9 @@ function Sidebar({ isCollapsed }) {
           </span>
         </div>
 
-        {/* Brand text — fades out when collapsed */}
-        {/* 📝 LEARN: overflow-hidden + w-0 trick hides the text smoothly */}
         <div
           className="overflow-hidden whitespace-nowrap transition-all duration-300"
-          style={{
-            width: isCollapsed ? 0 : 'auto',
-            opacity: isCollapsed ? 0 : 1,
-          }}
+          style={{ width: isCollapsed ? 0 : 'auto', opacity: isCollapsed ? 0 : 1 }}
         >
           <div className="font-bold text-sm" style={{ color: 'var(--text)' }}>TixM8</div>
           <div className="text-[9px] uppercase tracking-widest" style={{ color: 'var(--text-3)' }}>
@@ -102,122 +97,121 @@ function Sidebar({ isCollapsed }) {
       </div>
 
       {/* ── Navigation ── */}
-      <nav className="flex-1 overflow-y-auto overflow-x-hidden py-2">
+      <nav className="flex-1 overflow-y-auto py-2">
         {navSections.map((section) => (
           <div key={section.label} className="px-2 mb-1">
 
-            {/* Section label — hidden when collapsed */}
+            {/* Section label */}
             <div
               className="overflow-hidden transition-all duration-300"
               style={{ height: isCollapsed ? 0 : 22, opacity: isCollapsed ? 0 : 1 }}
             >
-              <p
-                className="text-[9px] font-bold uppercase tracking-widest px-2 mb-1"
-                style={{ color: 'var(--text-3)' }}
-              >
+              <p className="text-[9px] font-bold uppercase tracking-widest px-2 mb-1"
+                style={{ color: 'var(--text-3)' }}>
                 {section.label}
               </p>
             </div>
 
             {/* Nav items */}
             {section.items.map((item) => (
-              <NavLink
+              <div
                 key={item.to}
-                to={item.to}
-                title={isCollapsed ? item.text : ''}
-                className={({ isActive }) =>
-                  `flex items-center rounded-md text-xs font-medium cursor-pointer transition-all duration-150
-                  ${isActive ? 'active-nav' : ''}`
-                }
-                // ✅ Fixed — icon stays left always, never moves
-                style={({ isActive }) => ({
-                  padding: '8px 10px',           // ← same padding always
-                  justifyContent: 'flex-start',  // ← always left, icon never shifts
-                  gap: 8,                        // ← gap stays, text just fades to 0 width
-                  color: isActive ? 'var(--accent)' : 'var(--text-2)',
-                  background: isActive ? 'var(--accent-dim)' : 'transparent',
-                })}
+                className="relative"
+                // 📝 LEARN: getBoundingClientRect() gets the element's position on screen
+                // We use it to position the fixed tooltip at the right vertical spot
                 onMouseEnter={e => {
-                  if (!e.currentTarget.classList.contains('active-nav'))
-                    e.currentTarget.style.background = 'var(--surface)'
+                  if (isCollapsed) {
+                    const rect = e.currentTarget.getBoundingClientRect()
+                    setTooltip({
+                      text: item.text,
+                      y: rect.top + rect.height / 2,
+                    })
+                  }
                 }}
-                onMouseLeave={e => {
-                  if (!e.currentTarget.classList.contains('active-nav'))
-                    e.currentTarget.style.background = 'transparent'
-                }}
+                onMouseLeave={() => setTooltip(null)}
               >
-                {/* Icon — always visible, never shrinks */}
-                <item.icon size={18} strokeWidth={1.8} className="shrink-0" />
-
-                {/* Text — smoothly hides when collapsed */}
-                {/* 📝 LEARN: max-w-0 + overflow-hidden is the cleanest way to animate text hiding */}
-                <span
-                  className="whitespace-nowrap overflow-hidden transition-all duration-300"
-                  style={{
-                    maxWidth: isCollapsed ? 0 : 200,   // ← collapses to 0 width smoothly
-                    opacity: isCollapsed ? 0 : 1,
+                <NavLink
+                  to={item.to}
+                  className={({ isActive }) =>
+                    `flex items-center rounded-md text-xs font-medium cursor-pointer transition-all duration-150
+                     ${isActive ? 'active-nav' : ''}`
+                  }
+                  style={({ isActive }) => ({
+                    padding: '8px 10px',
+                    justifyContent: 'flex-start',
+                    gap: 8,
+                    color: isActive ? 'var(--accent)' : 'var(--text-2)',
+                    background: isActive ? 'var(--accent-dim)' : 'transparent',
+                  })}
+                  onMouseEnter={e => {
+                    if (!e.currentTarget.classList.contains('active-nav'))
+                      e.currentTarget.style.background = 'var(--surface)'
+                  }}
+                  onMouseLeave={e => {
+                    if (!e.currentTarget.classList.contains('active-nav'))
+                      e.currentTarget.style.background = 'transparent'
                   }}
                 >
-                  {item.text}
-                </span>
+                  <item.icon size={18} strokeWidth={1.8} className="shrink-0" />
 
-                {/* Badge — only show when open */}
-                {item.badge && !isCollapsed && (
                   <span
-                    className="text-[9px] font-bold px-1.5 py-0.5 rounded-full ml-auto shrink-0"
-                    style={{
-                      background: item.badgeColor === 'blue'
-                        ? 'var(--blue)'
-                        : item.badgeColor === 'yellow'
-                          ? 'var(--yellow)'
-                          : 'var(--red)',
-                      color: item.badgeColor === 'yellow' ? '#000' : '#fff',
-                    }}
+                    className="whitespace-nowrap overflow-hidden transition-all duration-300"
+                    style={{ maxWidth: isCollapsed ? 0 : 200, opacity: isCollapsed ? 0 : 1 }}
                   >
-                    {item.badge}
+                    {item.text}
                   </span>
-                )}
-              </NavLink>
+
+                  {item.badge && !isCollapsed && (
+                    <span
+                      className="text-[9px] font-bold px-1.5 py-0.5 rounded-full ml-auto shrink-0"
+                      style={{
+                        background: item.badgeColor === 'blue' ? 'var(--blue)'
+                          : item.badgeColor === 'yellow' ? 'var(--yellow)' : 'var(--red)',
+                        color: item.badgeColor === 'yellow' ? '#000' : '#fff',
+                      }}
+                    >
+                      {item.badge}
+                    </span>
+                  )}
+                </NavLink>
+              </div>
             ))}
           </div>
         ))}
       </nav>
 
-      {/* ── Footer / User ── */}
-      <div
-        className="flex items-center gap-2 shrink-0 cursor-pointer transition-colors"
-        style={{
-          padding: isCollapsed ? '12px 11px' : '12px 14px',
-          borderTop: '1px solid var(--border)',
-          justifyContent: isCollapsed ? 'center' : 'flex-start',
-          transition: 'padding 0.3s ease',
-        }}
-      >
-        {/* Avatar */}
+      {/* ── Tooltip ── */}
+      {/* 📝 LEARN: position fixed = relative to the SCREEN not any parent
+          This escapes ALL overflow clipping — nothing can hide it */}
+      {tooltip && (
         <div
-          className="flex items-center justify-center rounded-full font-bold shrink-0"
-          style={{ width: 30, height: 30, background: 'var(--accent)', fontSize: 11, color: '#000' }}
+          role="tooltip"
+          className="fixed z-[999] px-3 py-2 rounded-lg text-xs font-medium
+                     pointer-events-none whitespace-nowrap
+                     transition-opacity duration-200 opacity-100"
+          style={{
+            left: '64px',          // sidebar width + gap
+            top: tooltip.y,        // vertical center of hovered item
+            transform: 'translateY(-50%)',
+            background: 'var(--surface3)',
+            color: 'var(--text)',
+            border: '1px solid var(--border2)',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+          }}
         >
-          SA
-        </div>
-
-        {/* User info */}
-        <div
-          className="overflow-hidden whitespace-nowrap transition-all duration-300"
-          style={{ opacity: isCollapsed ? 0 : 1, width: isCollapsed ? 0 : 'auto' }}
-        >
-          <div className="text-xs font-semibold" style={{ color: 'var(--text)' }}>Super Admin</div>
-          <div className="text-[10px]" style={{ color: 'var(--text-2)' }}>God Mode</div>
-        </div>
-
-        {/* Online dot */}
-        {!isCollapsed && (
+          {tooltip.text}
+          {/* Arrow pointing left */}
           <div
-            className="w-2 h-2 rounded-full ml-auto shrink-0"
-            style={{ background: 'var(--green)' }}
+            className="absolute right-full top-1/2 -translate-y-1/2"
+            style={{
+              width: 0, height: 0,
+              borderTop: '4px solid transparent',
+              borderBottom: '4px solid transparent',
+              borderRight: `4px solid var(--surface3)`,
+            }}
           />
-        )}
-      </div>
+        </div>
+      )}
 
     </aside>
   )
