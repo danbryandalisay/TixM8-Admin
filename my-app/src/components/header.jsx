@@ -25,8 +25,8 @@ function Header({ onToggle, onLogout, onToggleTheme, isDark, user }) {
 
   return (
     <header
-      className="flex items-center gap-3 shrink-0 px-4 h-[52px]"
-      style={{ background: 'var(--bg2)', borderBottom: '1px solid var(--border)' }}
+      className="bg-gradient-to-l from-bg2/70 to-bg3 flex items-center gap-3 shrink-0 px-4 h-[52px]"
+      style={{borderBottom: '1px solid var(--border)' }}
     >
       {/* Toggle Sidebar */}
       <button

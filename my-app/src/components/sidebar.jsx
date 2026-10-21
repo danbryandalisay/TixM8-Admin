@@ -56,10 +56,9 @@ function Sidebar({ isCollapsed }) {
 
   return (
     <aside
-      className="flex flex-col h-screen shrink-0 transition-all duration-300 ease-in-out"
+      className="bg-bg3 flex flex-col h-screen shrink-0 transition-all duration-300 ease-in-out"
       style={{
         width: isCollapsed ? '52px' : '220px',
-        background: 'var(--bg2)',
         borderRight: '1px solid var(--border)',
       }}
     >
@@ -140,7 +139,7 @@ function Sidebar({ isCollapsed }) {
                     padding: '8px 10px',
                     justifyContent: 'flex-start',
                     gap: 8,
-                    color: isActive ? 'var(--accent)' : 'var(--text-2)',
+                    color: isActive ? 'var(--accent)' : 'var(--text-4)',
                     background: isActive ? 'var(--accent-dim)' : 'transparent',
                   })}
                   onMouseEnter={e => {

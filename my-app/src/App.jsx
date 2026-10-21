@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Sidebar from './components/sidebar'
 import Header from './components/header'
+import Footer from './components/footer'
 import Dashboard from './pages/dashboard'
 import Events from './pages/events'
 import Orders from './pages/orders'
@@ -76,6 +77,7 @@ function App() {
                       <Route path="/users"  element={<Users />}     />
                     </Routes>
                   </main>
+                  <Footer /> 
                 </div>
               </div>
             </ProtectedRoute>
