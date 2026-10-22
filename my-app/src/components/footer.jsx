@@ -1,11 +1,11 @@
 function Footer() {
-  // 📝 LEARN: new Date().getFullYear() automatically gets the current year
+  // new Date().getFullYear() automatically gets the current year
   // So you never have to manually update the copyright year
   const year = new Date().getFullYear()
 
   return (
     <footer
-      className="shrink-0 px-6 py-3 flex items-center justify-between text-[11px]"
+      className="bg-gradient-to-l from-bg2/70 to-bg3 shrink-0 px-6 py-3 flex items-center justify-between text-[11px]"
       style={{
         borderTop: '1px solid var(--border)',
         color: 'var(--text-3)',

@@ -1,7 +1,7 @@
 import { Ticket, PhilippinePeso, CalendarDays, Users,ShoppingCartPlus } from 'lucide-react'
 import StatCard from '../components/stat-card'
 
-// 📝 LEARN: Icon is now a Lucide component, just like in sidebar.jsx
+// Icon is now a Lucide component, just like in sidebar.jsx
 // color uses your CSS variables instead of hardcoded hex
 
 const stats = [
@@ -19,7 +19,7 @@ const recentOrders = [
   { id: '#0005', customer: 'Carlo Mendoza',  event: 'UAAP Finals',       type: 'Sports',  amount: '₱ 800',   status: 'Cancelled' },
 ]
 
-// 📝 LEARN: Small helper to get badge styles per status
+// Small helper to get badge styles per status
 // Instead of writing if/else every time, we use an object lookup
 const statusStyles = {
   Completed: { background: 'var(--green-dim)',  color: 'var(--green)'  },
@@ -42,7 +42,7 @@ function Dashboard() {
       </div>
 
       {/* ── Stat Cards ── */}
-      {/* 📝 LEARN: grid-cols-4 = 4 columns, gap-4 = spacing between cards */}
+      {/* grid-cols-4 = 4 columns, gap-4 = spacing between cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         {stats.map((stat, index) => (
           <StatCard
@@ -111,7 +111,7 @@ function Dashboard() {
                     {order.amount}
                   </td>
                   <td className="px-4 py-3">
-                    {/* 📝 LEARN: statusStyles[order.status] looks up the style object
+                    {/* statusStyles[order.status] looks up the style object
                         using the status string as a key — cleaner than if/else */}
                     <ShoppingCartPlus size={16} style={{ color: statusStyles[order.status].color }} />
                   </td>

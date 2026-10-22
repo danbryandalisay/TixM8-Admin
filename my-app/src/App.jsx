@@ -22,12 +22,12 @@ function App() {
 
   const [isCollapsed, setIsCollapsed] = useState(true)
 
-  // 📝 LEARN: Dark mode state — reads saved preference from localStorage
+  // Dark mode state — reads saved preference from localStorage
   const [isDark, setIsDark] = useState(() => {
     return localStorage.getItem('tixm8_theme') === 'dark'
   })
 
-  // 📝 LEARN: useEffect — runs side effects when state changes
+  // useEffect — runs side effects when state changes
   // Every time isDark changes → update the class on <html> element
   useEffect(() => {
     if (isDark) {

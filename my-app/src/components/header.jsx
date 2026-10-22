@@ -3,14 +3,14 @@ import { Sun, Moon, LogOut } from 'lucide-react'
 
 function Header({ onToggle, onLogout, onToggleTheme, isDark, user }) {
 
-  // 📝 LEARN: useState to track if dropdown is open or closed
+  // useState to track if dropdown is open or closed
   const [dropdownOpen, setDropdownOpen] = useState(false)
 
-  // 📝 LEARN: useRef — points to the dropdown DOM element
+  // useRef — points to the dropdown DOM element
   // Used to detect clicks OUTSIDE the dropdown to close it
   const dropdownRef = useRef(null)
 
-  // 📝 LEARN: useEffect to close dropdown when clicking outside
+  // useEffect to close dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(e) {
       // if click is outside the dropdown div → close it
@@ -79,7 +79,7 @@ function Header({ onToggle, onLogout, onToggleTheme, isDark, user }) {
         <div className="w-px h-5" style={{ background: 'var(--border)' }} />
 
         {/* ── User Avatar + Dropdown ── */}
-        {/* 📝 LEARN: useRef attached here so we can detect outside clicks */}
+        {/* useRef attached here so we can detect outside clicks */}
         <div className="relative" ref={dropdownRef}>
 
           {/* Avatar Button — toggles dropdown */}
@@ -120,7 +120,7 @@ function Header({ onToggle, onLogout, onToggleTheme, isDark, user }) {
           </button>
 
           {/* ── Dropdown Menu ── */}
-          {/* 📝 LEARN: dropdownOpen controls visibility
+          {/* dropdownOpen controls visibility
               transition classes make it animate smoothly */}
           <div
             className="absolute right-0 top-full mt-2 w-56 rounded-xl overflow-hidden z-50 transition-all duration-200"
@@ -158,7 +158,7 @@ function Header({ onToggle, onLogout, onToggleTheme, isDark, user }) {
             <ul className="p-2 flex flex-col gap-0.5">
 
               {/* Dark Mode Toggle */}
-              {/* 📝 LEARN: This item has both text AND a toggle switch */}
+              {/* This item has both text AND a toggle switch */}
               <li
                 className="flex items-center justify-between px-2.5 py-2 rounded-lg cursor-pointer transition-colors"
                 style={{ color: 'var(--text-2)' }}

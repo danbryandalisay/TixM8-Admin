@@ -50,7 +50,7 @@ const navSections = [
 
 function Sidebar({ isCollapsed }) {
 
-  // 📝 LEARN: useState stores the current tooltip to show
+  // useState stores the current tooltip to show
   // null = no tooltip, { text, y } = show tooltip at that vertical position
   const [tooltip, setTooltip] = useState(null)
 
@@ -116,7 +116,7 @@ function Sidebar({ isCollapsed }) {
               <div
                 key={item.to}
                 className="relative"
-                // 📝 LEARN: getBoundingClientRect() gets the element's position on screen
+                // getBoundingClientRect() gets the element's position on screen
                 // We use it to position the fixed tooltip at the right vertical spot
                 onMouseEnter={e => {
                   if (isCollapsed) {
@@ -180,7 +180,7 @@ function Sidebar({ isCollapsed }) {
       </nav>
 
       {/* ── Tooltip ── */}
-      {/* 📝 LEARN: position fixed = relative to the SCREEN not any parent
+      {/* position fixed = relative to the SCREEN not any parent
           This escapes ALL overflow clipping — nothing can hide it */}
       {tooltip && (
         <div

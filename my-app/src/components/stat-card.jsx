@@ -19,7 +19,7 @@ function StatCard({ title, value, icon: Icon, color }) {
         className="flex items-center justify-center rounded-lg shrink-0"
         style={{ width: 40, height: 40, background: `${color}20`, color: color }}
       >
-        {/* ✅ Render as component, not as value */}
+        {/* Render as component, not as value */}
         <Icon size={20} strokeWidth={1.8} />
       </div>
       <div>
