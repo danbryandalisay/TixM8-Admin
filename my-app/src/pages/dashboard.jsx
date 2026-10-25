@@ -57,7 +57,7 @@ function Dashboard() {
 
       {/* ── Recent Orders Table ── */}
       <div
-        className="rounded-xl overflow-hidden"
+        className="rounded-lg overflow-hidden"
         style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
       >
         {/* Table header */}

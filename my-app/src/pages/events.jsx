@@ -145,7 +145,7 @@ function Events() {
 
       {/* ── Search + Filters ── */}
       <div
-        className="flex flex-wrap items-center gap-3 p-4 rounded-xl mb-4"
+        className="flex flex-wrap items-center gap-3 p-4 rounded-lg mb-4"
         style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
       >
         {/* Search */}
@@ -206,7 +206,7 @@ function Events() {
 
       {/* ── Table ── */}
       <div
-        className="rounded-xl overflow-hidden"
+        className="rounded-lg overflow-hidden"
         style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
       >
         <div className="overflow-x-auto">
@@ -422,7 +422,7 @@ function Events() {
                     { icon: Ticket,       label: 'Tickets',     value: `${selected.sold} / ${selected.tickets} sold` },
                     { icon: Tag,          label: 'Price',       value: `₱${selected.price.toLocaleString()}`  },
                   ].map(({ icon: Icon, label, value }) => (
-                    <div key={label} className="p-3 rounded-xl" style={{ background: 'var(--surface2)', border: '1px solid var(--border)' }}>
+                    <div key={label} className="p-3 rounded-lg" style={{ background: 'var(--surface2)', border: '1px solid var(--border)' }}>
                       <div className="flex items-center gap-1.5 mb-1">
                         <Icon size={12} style={{ color: 'var(--accent)' }} />
                         <span className="text-[10px] uppercase tracking-wider" style={{ color: 'var(--text-3)' }}>{label}</span>
@@ -433,7 +433,7 @@ function Events() {
                 </div>
 
                 {/* Occupancy bar */}
-                <div className="mt-4 p-3 rounded-xl" style={{ background: 'var(--surface2)', border: '1px solid var(--border)' }}>
+                <div className="mt-4 p-3 rounded-lg" style={{ background: 'var(--surface2)', border: '1px solid var(--border)' }}>
                   <div className="flex justify-between mb-2">
                     <span className="text-[10px] uppercase tracking-wider" style={{ color: 'var(--text-3)' }}>Occupancy</span>
                     <span className="text-xs font-bold" style={{ color: 'var(--text)' }}>

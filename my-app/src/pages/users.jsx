@@ -147,7 +147,7 @@ function Users() {
         ].map(stat => (
           <div
             key={stat.label}
-            className="flex items-center gap-3 p-4 rounded-xl"
+            className="flex items-center gap-3 p-4 rounded-lg"
             style={{ background: 'var(--surface)', border: '1px solid var(--border)'}}
           >
             <div
@@ -166,7 +166,7 @@ function Users() {
 
       {/* ── Search + Filters ── */}
       <div
-        className="flex flex-wrap items-center gap-3 p-4 rounded-xl mb-4"
+        className="flex flex-wrap items-center gap-3 p-4 rounded-lg mb-4"
         style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
       >
         <div
@@ -205,7 +205,7 @@ function Users() {
 
       {/* ── Table ── */}
       <div
-        className="rounded-xl overflow-hidden"
+        className="rounded-lg overflow-hidden"
         style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
       >
         <div className="overflow-x-auto">
@@ -404,7 +404,7 @@ function Users() {
                   ].map(({ icon: Icon, label, value }) => (
                     <div
                       key={label}
-                      className="p-3 rounded-xl"
+                      className="p-3 rounded-lg"
                       style={{ background: 'var(--surface2)', border: '1px solid var(--border)' }}
                     >
                       <div className="flex items-center gap-1.5 mb-1">
@@ -420,7 +420,7 @@ function Users() {
 
                 {/* Joined */}
                 <div
-                  className="p-3 rounded-xl text-xs"
+                  className="p-3 rounded-lg text-xs"
                   style={{ background: 'var(--surface2)', border: '1px solid var(--border)', color: 'var(--text-2)' }}
                 >
                   Member since <span className="font-semibold" style={{ color: 'var(--text)' }}>{selected.joined}</span>
