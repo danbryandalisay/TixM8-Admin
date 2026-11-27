@@ -65,9 +65,9 @@ function Sidebar({ isCollapsed }) {
 
       {/* ── Logo / Brand ── */}
       <div
-        className="flex items-center gap-3 shrink-0"
+        className="bg-bg4 flex items-center gap-3 shrink-0"
         style={{
-          padding: isCollapsed ? '18px 11px' : '18px 16px',
+          padding: isCollapsed ? '10px 11px' : '10px 16px',
           borderBottom: '1px solid var(--border)',
           transition: 'padding 0.3s ease',
         }}
@@ -88,8 +88,8 @@ function Sidebar({ isCollapsed }) {
           className="overflow-hidden whitespace-nowrap transition-all duration-300"
           style={{ width: isCollapsed ? 0 : 'auto', opacity: isCollapsed ? 0 : 1 }}
         >
-          <div className="font-bold text-sm" style={{ color: 'var(--text)' }}>TixM8</div>
-          <div className="text-[9px] uppercase tracking-widest" style={{ color: 'var(--text-3)' }}>
+          <div className="font-bold text-lg" style={{ color: 'var(--text-5)' }}>TixM8</div>
+          <div className="text-sm uppercase tracking-widest" style={{ color: 'var(--text-2)' }}>
             Admin Panel
           </div>
         </div>
@@ -105,7 +105,7 @@ function Sidebar({ isCollapsed }) {
               className="overflow-hidden transition-all duration-300"
               style={{ height: isCollapsed ? 0 : 22, opacity: isCollapsed ? 0 : 1 }}
             >
-              <p className="text-[9px] font-bold uppercase tracking-widest px-2 mb-1"
+              <p className="text-base font-bold uppercase tracking-widest px-2 mb-1"
                 style={{ color: 'var(--text-3)' }}>
                 {section.label}
               </p>
@@ -139,7 +139,7 @@ function Sidebar({ isCollapsed }) {
                     padding: '8px 10px',
                     justifyContent: 'flex-start',
                     gap: 8,
-                    color: isActive ? 'var(--accent)' : 'var(--text-4)',
+                    color: isActive ? 'var(--accent)' : 'var(--text-3)',
                     background: isActive ? 'var(--accent-dim)' : 'transparent',
                   })}
                   onMouseEnter={e => {
@@ -154,7 +154,7 @@ function Sidebar({ isCollapsed }) {
                   <item.icon size={18} strokeWidth={1.8} className="shrink-0" />
 
                   <span
-                    className="whitespace-nowrap overflow-hidden transition-all duration-300"
+                    className="text-sm font-semibold whitespace-nowrap overflow-hidden transition-all duration-300"
                     style={{ maxWidth: isCollapsed ? 0 : 200, opacity: isCollapsed ? 0 : 1 }}
                   >
                     {item.text}
@@ -162,7 +162,7 @@ function Sidebar({ isCollapsed }) {
 
                   {item.badge && !isCollapsed && (
                     <span
-                      className="text-[9px] font-bold px-1.5 py-0.5 rounded-full ml-auto shrink-0"
+                      className="text-sm font-bold px-1.5 py-0.5 rounded-full ml-auto shrink-0"
                       style={{
                         background: item.badgeColor === 'blue' ? 'var(--blue)'
                           : item.badgeColor === 'yellow' ? 'var(--yellow)' : 'var(--red)',

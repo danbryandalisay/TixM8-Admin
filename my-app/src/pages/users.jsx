@@ -122,8 +122,8 @@ function Users() {
       {/* ── Page Header ── */}
       <div className="flex items-start justify-between mb-6 gap-4 flex-wrap">
         <div>
-          <h1 className="text-2xl font-bold" style={{ color: 'var(--text)' }}>Customers</h1>
-          <p className="text-sm mt-1" style={{ color: 'var(--text-2)' }}>
+          <h1 className="text-3xl font-bold" style={{ color: 'var(--text-5)' }}>Customers</h1>
+          <p className="text-base mt-1" style={{ color: 'var(--text-2)' }}>
             Manage all registered customers — {users.length} total
           </p>
         </div>

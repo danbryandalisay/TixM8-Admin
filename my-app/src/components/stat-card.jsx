@@ -8,7 +8,7 @@
 function StatCard({ title, value, icon: Icon, color }) {
   return (
     <div
-      className="rounded-xl p-5 flex items-center gap-4"
+      className="rounded-lg p-5 flex items-center gap-4"
       style={{
         background: 'var(--surface)',
         border: '1px solid var(--border)',
@@ -23,7 +23,7 @@ function StatCard({ title, value, icon: Icon, color }) {
         <Icon size={20} strokeWidth={1.8} />
       </div>
       <div>
-        <p className="text-[11px] uppercase tracking-wider mb-1" style={{ color: 'var(--text-3)' }}>
+        <p className="text-lg font-bold uppercase tracking-wider mb-1" style={{ color: 'var(--text-3)' }}>
           {title}
         </p>
         <p className="text-xl font-bold" style={{ color: 'var(--text)' }}>

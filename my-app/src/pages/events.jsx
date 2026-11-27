@@ -1,12 +1,11 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
   Plus, Search, Eye, Pencil, Trash2, X,
   CalendarDays, MapPin, Ticket, Tag, Filter
 } from 'lucide-react'
 
 // ── SAMPLE DATA ──────────────────────────────────────────
-// 📝 LEARN: In the future, this will come from an API call
-// using useEffect + fetch. For now, static data is fine.
 const initialEvents = [
   { id: 1,  name: 'Avengers Finale',        category: 'Movie',   date: '2026-11-05', time: '7:00 PM',  venue: 'SM Mall of Asia Arena',    tickets: 500,  sold: 480, price: 450,   status: 'Active'    },
   { id: 2,  name: 'PBA Finals Game 5',       category: 'Sports',  date: '2026-11-08', time: '6:30 PM',  venue: 'Araneta Coliseum',          tickets: 1200, sold: 950, price: 1200,  status: 'Active'    },
@@ -20,12 +19,9 @@ const initialEvents = [
   { id: 10, name: 'OPM Fest 2026',          category: 'Concert', date: '2026-10-25', time: '5:00 PM',  venue: 'Quirino Grandstand',        tickets: 3000, sold: 0,   price: 1200,  status: 'Cancelled' },
 ]
 
-// ── CONSTANTS ─────────────────────────────────────────────
 const CATEGORIES = ['All', 'Movie', 'Sports', 'Concert']
 const STATUSES   = ['All', 'Active', 'Upcoming', 'Completed', 'Cancelled']
 
-// ── STYLE HELPERS ─────────────────────────────────────────
-// 📝 LEARN: Object lookup — cleaner than if/else chains
 const statusStyle = {
   Active:    { background: 'var(--green-dim)',  color: 'var(--green)',  border: '1px solid rgba(14,158,82,.25)'  },
   Upcoming:  { background: 'var(--blue-dim)',   color: 'var(--blue)',   border: '1px solid rgba(79,114,216,.25)' },
@@ -39,28 +35,24 @@ const categoryStyle = {
   Concert: { background: 'var(--accent-dim)', color: 'var(--accent)' },
 }
 
-// ── EMPTY FORM ─────────────────────────────────────────────
 const emptyForm = {
   name: '', category: 'Movie', date: '', time: '',
   venue: '', tickets: '', price: '', status: 'Upcoming'
 }
 
-// ══════════════════════════════════════════════════════════
-// MAIN COMPONENT
-// ══════════════════════════════════════════════════════════
 function Events() {
 
-  // 📝 LEARN: All state for this page
+  // ✅ CHANGE 1: useNavigate hook — lets us go to /seat-selection
+  const navigate = useNavigate()
+
   const [events,     setEvents]     = useState(initialEvents)
   const [search,     setSearch]     = useState('')
   const [catFilter,  setCatFilter]  = useState('All')
   const [statFilter, setStatFilter] = useState('All')
-  const [modal,      setModal]      = useState(null)   // 'add' | 'edit' | 'view' | 'delete' | null
-  const [selected,   setSelected]   = useState(null)   // currently selected event object
+  const [modal,      setModal]      = useState(null)
+  const [selected,   setSelected]   = useState(null)
   const [form,       setForm]       = useState(emptyForm)
 
-  // ── Filtering ─────────────────────────────────────────
-  // 📝 LEARN: .filter() returns a new array with only items that pass the test
   const filtered = events.filter(e => {
     const matchSearch = e.name.toLowerCase().includes(search.toLowerCase()) ||
                         e.venue.toLowerCase().includes(search.toLowerCase())
@@ -69,21 +61,32 @@ function Events() {
     return matchSearch && matchCat && matchStat
   })
 
-  // ── Modal Helpers ──────────────────────────────────────
   const openAdd    = ()  => { setForm(emptyForm); setModal('add')    }
   const openEdit   = (e) => { setForm({ ...e });  setSelected(e); setModal('edit')   }
   const openView   = (e) => { setSelected(e);     setModal('view')   }
   const openDelete = (e) => { setSelected(e);     setModal('delete') }
   const closeModal = ()  => { setModal(null); setSelected(null)      }
 
-  // ── Form change handler ────────────────────────────────
-  // 📝 LEARN: One handler for all inputs using [name] computed key
+  // ✅ CHANGE 2: navigate to seat selection, passing the event as state
+  const openBookSeats = (event) => {
+    navigate('/seat-selection', {
+      state: {
+        event: {
+          id:    event.id,
+          name:  event.name,
+          date:  event.date,
+          time:  event.time,
+          venue: event.venue,
+        }
+      }
+    })
+  }
+
   const handleChange = (e) => {
     const { name, value } = e.target
     setForm(prev => ({ ...prev, [name]: value }))
   }
 
-  // ── CRUD Handlers ──────────────────────────────────────
   const handleAdd = () => {
     if (!form.name || !form.date || !form.venue) return
     const newEvent = {
@@ -93,7 +96,6 @@ function Events() {
       tickets: Number(form.tickets),
       price:   Number(form.price),
     }
-    // 📝 LEARN: spread + new item = adds to array without mutating original
     setEvents(prev => [...prev, newEvent])
     closeModal()
   }
@@ -109,34 +111,31 @@ function Events() {
   }
 
   const handleDelete = () => {
-    // 📝 LEARN: .filter() removes the item with matching id
     setEvents(prev => prev.filter(e => e.id !== selected.id))
     closeModal()
   }
 
-  // ── Occupancy bar color ────────────────────────────────
   const occupancyColor = (pct) => {
     if (pct >= 90) return 'var(--red)'
     if (pct >= 60) return 'var(--accent)'
     return 'var(--green)'
   }
 
-  // ══════════════════════════════════════════════════════
   return (
     <div className="max-w-full">
 
       {/* ── Page Header ── */}
       <div className="flex items-start justify-between mb-6 gap-4 flex-wrap">
         <div>
-          <h1 className="text-2xl font-bold" style={{ color: 'var(--text)' }}>Events</h1>
-          <p className="text-sm mt-1" style={{ color: 'var(--text-2)' }}>
+          <h1 className="text-3xl font-bold" style={{ color: 'var(--text-5)' }}>Events</h1>
+          <p className="text-base mt-1" style={{ color: 'var(--text-2)' }}>
             Manage all ticketing events — {events.length} total
           </p>
         </div>
         <button
           onClick={openAdd}
-          className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-opacity hover:opacity-90"
-          style={{ background: 'var(--accent)', color: '#000' }}
+          className="flex items-center gap-2 px-4 py-2 rounded-lg text-base font-semibold transition-opacity hover:opacity-90"
+          style={{ background: 'var(--accent)', color: 'var(--text-4)' }}
         >
           <Plus size={16} />
           Add Event
@@ -148,7 +147,6 @@ function Events() {
         className="flex flex-wrap items-center gap-3 p-4 rounded-lg mb-4"
         style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
       >
-        {/* Search */}
         <div
           className="flex items-center gap-2 px-3 h-9 rounded-lg flex-1 min-w-[200px] max-w-[400px]"
           style={{ background: 'var(--surface2)', border: '1px solid var(--border)' }}
@@ -165,7 +163,6 @@ function Events() {
 
         <Filter size={14} style={{ color: 'var(--text-3)' }} />
 
-        {/* Category Filter */}
         <div className="flex items-center gap-1">
           {CATEGORIES.map(c => (
             <button
@@ -185,7 +182,6 @@ function Events() {
 
         <div className="w-px h-5" style={{ background: 'var(--border)' }} />
 
-        {/* Status Filter */}
         <div className="flex items-center gap-1 flex-wrap">
           {STATUSES.map(s => (
             <button
@@ -234,6 +230,8 @@ function Events() {
               ) : (
                 filtered.map(event => {
                   const pct = Math.round((event.sold / event.tickets) * 100) || 0
+                  // ✅ CHANGE 3: only Active/Upcoming can book seats
+                  const canBook = event.status === 'Active' || event.status === 'Upcoming'
                   return (
                     <tr
                       key={event.id}
@@ -242,66 +240,43 @@ function Events() {
                       onMouseEnter={e => e.currentTarget.style.background = 'var(--surface2)'}
                       onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                     >
-                      {/* Event Name */}
                       <td className="px-4 py-3">
                         <div className="text-xs font-semibold" style={{ color: 'var(--text)' }}>
                           {event.name}
                         </div>
                       </td>
 
-                      {/* Category */}
                       <td className="px-4 py-3">
-                        <span
-                          className="text-[10px] font-bold px-2 py-1 rounded-md"
-                          style={categoryStyle[event.category]}
-                        >
+                        <span className="text-[10px] font-bold px-2 py-1 rounded-md" style={categoryStyle[event.category]}>
                           {event.category}
                         </span>
                       </td>
 
-                      {/* Date & Time */}
                       <td className="px-4 py-3">
                         <div className="text-xs" style={{ color: 'var(--text)' }}>{event.date}</div>
                         <div className="text-[10px]" style={{ color: 'var(--text-3)' }}>{event.time}</div>
                       </td>
 
-                      {/* Venue */}
                       <td className="px-4 py-3 text-xs max-w-[180px] truncate" style={{ color: 'var(--text-2)' }}>
                         {event.venue}
                       </td>
 
-                      {/* Occupancy */}
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-2">
-                          <div
-                            className="w-20 h-1.5 rounded-full overflow-hidden"
-                            style={{ background: 'var(--border)' }}
-                          >
-                            <div
-                              className="h-full rounded-full transition-all"
-                              style={{ width: `${pct}%`, background: occupancyColor(pct) }}
-                            />
+                          <div className="w-20 h-1.5 rounded-full overflow-hidden" style={{ background: 'var(--border)' }}>
+                            <div className="h-full rounded-full transition-all" style={{ width: `${pct}%`, background: occupancyColor(pct) }} />
                           </div>
-                          <span className="text-[10px] font-semibold" style={{ color: 'var(--text-2)' }}>
-                            {pct}%
-                          </span>
+                          <span className="text-[10px] font-semibold" style={{ color: 'var(--text-2)' }}>{pct}%</span>
                         </div>
-                        <div className="text-[10px] mt-0.5" style={{ color: 'var(--text-3)' }}>
-                          {event.sold}/{event.tickets}
-                        </div>
+                        <div className="text-[10px] mt-0.5" style={{ color: 'var(--text-3)' }}>{event.sold}/{event.tickets}</div>
                       </td>
 
-                      {/* Price */}
                       <td className="px-4 py-3 text-xs font-semibold" style={{ color: 'var(--accent)' }}>
                         ₱{event.price.toLocaleString()}
                       </td>
 
-                      {/* Status */}
                       <td className="px-4 py-3">
-                        <span
-                          className="text-[10px] font-bold px-2 py-1 rounded-md"
-                          style={statusStyle[event.status]}
-                        >
+                        <span className="text-[10px] font-bold px-2 py-1 rounded-md" style={statusStyle[event.status]}>
                           {event.status}
                         </span>
                       </td>
@@ -309,41 +284,46 @@ function Events() {
                       {/* Actions */}
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-1">
-                          {/* View */}
-                          <button
-                            onClick={() => openView(event)}
+
+                          <button onClick={() => openView(event)}
                             className="flex items-center justify-center w-7 h-7 rounded-md transition-colors"
                             style={{ color: 'var(--blue)' }}
                             onMouseEnter={e => e.currentTarget.style.background = 'var(--blue-dim)'}
                             onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-                            title="View"
-                          >
+                            title="View">
                             <Eye size={13} />
                           </button>
 
-                          {/* Edit */}
-                          <button
-                            onClick={() => openEdit(event)}
+                          <button onClick={() => openEdit(event)}
                             className="flex items-center justify-center w-7 h-7 rounded-md transition-colors"
                             style={{ color: 'var(--accent)' }}
                             onMouseEnter={e => e.currentTarget.style.background = 'var(--accent-dim)'}
                             onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-                            title="Edit"
-                          >
+                            title="Edit">
                             <Pencil size={13} />
                           </button>
 
-                          {/* Delete */}
-                          <button
-                            onClick={() => openDelete(event)}
+                          <button onClick={() => openDelete(event)}
                             className="flex items-center justify-center w-7 h-7 rounded-md transition-colors"
                             style={{ color: 'var(--red)' }}
                             onMouseEnter={e => e.currentTarget.style.background = 'var(--red-dim)'}
                             onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-                            title="Delete"
-                          >
+                            title="Delete">
                             <Trash2 size={13} />
                           </button>
+
+                          {/* ✅ CHANGE 3: Book Seats — green ticket, only Active/Upcoming */}
+                          {canBook && (
+                            <button onClick={() => openBookSeats(event)}
+                              className="flex items-center justify-center w-7 h-7 rounded-md transition-colors"
+                              style={{ color: 'var(--green)' }}
+                              onMouseEnter={e => e.currentTarget.style.background = 'var(--green-dim)'}
+                              onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                              title="Book Seats">
+                              <Ticket size={13} />
+                            </button>
+                          )}
+
                         </div>
                       </td>
                     </tr>
@@ -354,36 +334,25 @@ function Events() {
           </table>
         </div>
 
-        {/* Table Footer */}
-        <div
-          className="px-4 py-3 flex items-center justify-between"
-          style={{ borderTop: '1px solid var(--border)' }}
-        >
+        <div className="px-4 py-3 flex items-center justify-between" style={{ borderTop: '1px solid var(--border)' }}>
           <span className="text-[11px]" style={{ color: 'var(--text-3)' }}>
             Showing {filtered.length} of {events.length} events
           </span>
         </div>
       </div>
 
-      {/* ══════════════════════════════════════════════════
-           MODALS
-      ══════════════════════════════════════════════════ */}
-
-      {/* ── Backdrop ── */}
+      {/* ══ MODALS ══ */}
       {modal && (
         <div
           className="fixed inset-0 z-40 flex items-center justify-center p-4"
           style={{ background: 'rgba(0,0,0,0.6)' }}
           onClick={closeModal}
         >
-          {/* ── Modal Box ── */}
-          {/* 📝 LEARN: stopPropagation prevents clicking inside from closing modal */}
           <div
             className="relative w-full max-w-lg rounded-2xl p-6 z-50"
             style={{ background: 'var(--surface)', border: '1px solid var(--border)', boxShadow: '0 24px 48px rgba(0,0,0,0.3)' }}
             onClick={e => e.stopPropagation()}
           >
-            {/* Close button */}
             <button
               onClick={closeModal}
               className="absolute top-4 right-4 w-7 h-7 flex items-center justify-center rounded-lg transition-colors"
@@ -400,17 +369,11 @@ function Events() {
                 <div className="flex items-start gap-3 mb-6">
                   <div className="flex-1">
                     <h2 className="text-lg font-bold" style={{ color: 'var(--text)' }}>{selected.name}</h2>
-                    <span
-                      className="text-[10px] font-bold px-2 py-0.5 rounded-md mt-1 inline-block"
-                      style={statusStyle[selected.status]}
-                    >
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-md mt-1 inline-block" style={statusStyle[selected.status]}>
                       {selected.status}
                     </span>
                   </div>
-                  <span
-                    className="text-[10px] font-bold px-2 py-1 rounded-md"
-                    style={categoryStyle[selected.category]}
-                  >
+                  <span className="text-[10px] font-bold px-2 py-1 rounded-md" style={categoryStyle[selected.category]}>
                     {selected.category}
                   </span>
                 </div>
@@ -432,7 +395,6 @@ function Events() {
                   ))}
                 </div>
 
-                {/* Occupancy bar */}
                 <div className="mt-4 p-3 rounded-lg" style={{ background: 'var(--surface2)', border: '1px solid var(--border)' }}>
                   <div className="flex justify-between mb-2">
                     <span className="text-[10px] uppercase tracking-wider" style={{ color: 'var(--text-3)' }}>Occupancy</span>
@@ -441,15 +403,22 @@ function Events() {
                     </span>
                   </div>
                   <div className="h-2 rounded-full" style={{ background: 'var(--border)' }}>
-                    <div
-                      className="h-full rounded-full"
-                      style={{
-                        width: `${Math.round((selected.sold / selected.tickets) * 100)}%`,
-                        background: occupancyColor(Math.round((selected.sold / selected.tickets) * 100))
-                      }}
-                    />
+                    <div className="h-full rounded-full"
+                      style={{ width: `${Math.round((selected.sold / selected.tickets) * 100)}%`, background: occupancyColor(Math.round((selected.sold / selected.tickets) * 100)) }} />
                   </div>
                 </div>
+
+                {/* ✅ CHANGE 4: Book Seats button inside View modal */}
+                {(selected.status === 'Active' || selected.status === 'Upcoming') && (
+                  <button
+                    onClick={() => { closeModal(); openBookSeats(selected) }}
+                    className="mt-4 w-full py-2.5 rounded-lg text-xs font-semibold flex items-center justify-center gap-2 transition-opacity hover:opacity-90"
+                    style={{ background: 'var(--accent)', color: '#000' }}
+                  >
+                    <Ticket size={13} />
+                    Book Seats
+                  </button>
+                )}
               </div>
             )}
 
@@ -464,137 +433,83 @@ function Events() {
                 </p>
 
                 <div className="flex flex-col gap-3">
-
-                  {/* Event Name */}
                   <div>
-                    <label className="block text-[10px] font-semibold uppercase tracking-wider mb-1" style={{ color: 'var(--text-2)' }}>
-                      Event Name
-                    </label>
-                    <input
-                      name="name"
-                      value={form.name}
-                      onChange={handleChange}
-                      placeholder="e.g. Ben & Ben Concert"
+                    <label className="block text-[10px] font-semibold uppercase tracking-wider mb-1" style={{ color: 'var(--text-2)' }}>Event Name</label>
+                    <input name="name" value={form.name} onChange={handleChange} placeholder="e.g. Ben & Ben Concert"
                       className="w-full px-3 py-2 rounded-lg text-xs outline-none"
                       style={{ background: 'var(--surface2)', border: '1px solid var(--border)', color: 'var(--text)' }}
                       onFocus={e => e.target.style.borderColor = 'var(--accent)'}
-                      onBlur={e => e.target.style.borderColor = 'var(--border)'}
-                    />
+                      onBlur={e => e.target.style.borderColor = 'var(--border)'} />
                   </div>
 
-                  {/* Category + Status */}
                   <div className="grid grid-cols-2 gap-3">
                     <div>
                       <label className="block text-[10px] font-semibold uppercase tracking-wider mb-1" style={{ color: 'var(--text-2)' }}>Category</label>
-                      <select
-                        name="category"
-                        value={form.category}
-                        onChange={handleChange}
+                      <select name="category" value={form.category} onChange={handleChange}
                         className="w-full px-3 py-2 rounded-lg text-xs outline-none"
-                        style={{ background: 'var(--surface2)', border: '1px solid var(--border)', color: 'var(--text)' }}
-                      >
+                        style={{ background: 'var(--surface2)', border: '1px solid var(--border)', color: 'var(--text)' }}>
                         {['Movie', 'Sports', 'Concert'].map(c => <option key={c}>{c}</option>)}
                       </select>
                     </div>
                     <div>
                       <label className="block text-[10px] font-semibold uppercase tracking-wider mb-1" style={{ color: 'var(--text-2)' }}>Status</label>
-                      <select
-                        name="status"
-                        value={form.status}
-                        onChange={handleChange}
+                      <select name="status" value={form.status} onChange={handleChange}
                         className="w-full px-3 py-2 rounded-lg text-xs outline-none"
-                        style={{ background: 'var(--surface2)', border: '1px solid var(--border)', color: 'var(--text)' }}
-                      >
+                        style={{ background: 'var(--surface2)', border: '1px solid var(--border)', color: 'var(--text)' }}>
                         {['Active', 'Upcoming', 'Completed', 'Cancelled'].map(s => <option key={s}>{s}</option>)}
                       </select>
                     </div>
                   </div>
 
-                  {/* Date + Time */}
                   <div className="grid grid-cols-2 gap-3">
                     <div>
                       <label className="block text-[10px] font-semibold uppercase tracking-wider mb-1" style={{ color: 'var(--text-2)' }}>Date</label>
-                      <input
-                        type="date"
-                        name="date"
-                        value={form.date}
-                        onChange={handleChange}
+                      <input type="date" name="date" value={form.date} onChange={handleChange}
                         className="w-full px-3 py-2 rounded-lg text-xs outline-none"
-                        style={{ background: 'var(--surface2)', border: '1px solid var(--border)', color: 'var(--text)' }}
-                      />
+                        style={{ background: 'var(--surface2)', border: '1px solid var(--border)', color: 'var(--text)' }} />
                     </div>
                     <div>
                       <label className="block text-[10px] font-semibold uppercase tracking-wider mb-1" style={{ color: 'var(--text-2)' }}>Time</label>
-                      <input
-                        name="time"
-                        value={form.time}
-                        onChange={handleChange}
-                        placeholder="e.g. 7:00 PM"
+                      <input name="time" value={form.time} onChange={handleChange} placeholder="e.g. 7:00 PM"
                         className="w-full px-3 py-2 rounded-lg text-xs outline-none"
-                        style={{ background: 'var(--surface2)', border: '1px solid var(--border)', color: 'var(--text)' }}
-                      />
+                        style={{ background: 'var(--surface2)', border: '1px solid var(--border)', color: 'var(--text)' }} />
                     </div>
                   </div>
 
-                  {/* Venue */}
                   <div>
                     <label className="block text-[10px] font-semibold uppercase tracking-wider mb-1" style={{ color: 'var(--text-2)' }}>Venue</label>
-                    <input
-                      name="venue"
-                      value={form.venue}
-                      onChange={handleChange}
-                      placeholder="e.g. SM Mall of Asia Arena"
+                    <input name="venue" value={form.venue} onChange={handleChange} placeholder="e.g. SM Mall of Asia Arena"
                       className="w-full px-3 py-2 rounded-lg text-xs outline-none"
                       style={{ background: 'var(--surface2)', border: '1px solid var(--border)', color: 'var(--text)' }}
                       onFocus={e => e.target.style.borderColor = 'var(--accent)'}
-                      onBlur={e => e.target.style.borderColor = 'var(--border)'}
-                    />
+                      onBlur={e => e.target.style.borderColor = 'var(--border)'} />
                   </div>
 
-                  {/* Tickets + Price */}
                   <div className="grid grid-cols-2 gap-3">
                     <div>
                       <label className="block text-[10px] font-semibold uppercase tracking-wider mb-1" style={{ color: 'var(--text-2)' }}>Total Tickets</label>
-                      <input
-                        type="number"
-                        name="tickets"
-                        value={form.tickets}
-                        onChange={handleChange}
-                        placeholder="e.g. 500"
+                      <input type="number" name="tickets" value={form.tickets} onChange={handleChange} placeholder="e.g. 500"
                         className="w-full px-3 py-2 rounded-lg text-xs outline-none"
-                        style={{ background: 'var(--surface2)', border: '1px solid var(--border)', color: 'var(--text)' }}
-                      />
+                        style={{ background: 'var(--surface2)', border: '1px solid var(--border)', color: 'var(--text)' }} />
                     </div>
                     <div>
                       <label className="block text-[10px] font-semibold uppercase tracking-wider mb-1" style={{ color: 'var(--text-2)' }}>Price (₱)</label>
-                      <input
-                        type="number"
-                        name="price"
-                        value={form.price}
-                        onChange={handleChange}
-                        placeholder="e.g. 1500"
+                      <input type="number" name="price" value={form.price} onChange={handleChange} placeholder="e.g. 1500"
                         className="w-full px-3 py-2 rounded-lg text-xs outline-none"
-                        style={{ background: 'var(--surface2)', border: '1px solid var(--border)', color: 'var(--text)' }}
-                      />
+                        style={{ background: 'var(--surface2)', border: '1px solid var(--border)', color: 'var(--text)' }} />
                     </div>
                   </div>
-
                 </div>
 
-                {/* Buttons */}
                 <div className="flex gap-2 mt-5">
-                  <button
-                    onClick={modal === 'add' ? handleAdd : handleEdit}
+                  <button onClick={modal === 'add' ? handleAdd : handleEdit}
                     className="flex-1 py-2.5 rounded-lg text-xs font-semibold transition-opacity hover:opacity-90"
-                    style={{ background: 'var(--accent)', color: '#000' }}
-                  >
+                    style={{ background: 'var(--accent)', color: '#000' }}>
                     {modal === 'add' ? 'Add Event' : 'Save Changes'}
                   </button>
-                  <button
-                    onClick={closeModal}
+                  <button onClick={closeModal}
                     className="px-4 py-2.5 rounded-lg text-xs font-semibold transition-colors"
-                    style={{ background: 'var(--surface2)', color: 'var(--text-2)', border: '1px solid var(--border)' }}
-                  >
+                    style={{ background: 'var(--surface2)', color: 'var(--text-2)', border: '1px solid var(--border)' }}>
                     Cancel
                   </button>
                 </div>
@@ -604,37 +519,18 @@ function Events() {
             {/* ── DELETE Modal ── */}
             {modal === 'delete' && selected && (
               <div className="text-center">
-                <div
-                  className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4"
-                  style={{ background: 'var(--red-dim)' }}
-                >
+                <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4" style={{ background: 'var(--red-dim)' }}>
                   <Trash2 size={22} style={{ color: 'var(--red)' }} />
                 </div>
                 <h2 className="text-base font-bold mb-1" style={{ color: 'var(--text)' }}>Delete Event</h2>
-                <p className="text-xs mb-1" style={{ color: 'var(--text-2)' }}>
-                  Are you sure you want to delete
-                </p>
-                <p className="text-sm font-semibold mb-5" style={{ color: 'var(--text)' }}>
-                  "{selected.name}"?
-                </p>
-                <p className="text-xs mb-6" style={{ color: 'var(--text-3)' }}>
-                  This action cannot be undone.
-                </p>
+                <p className="text-xs mb-1" style={{ color: 'var(--text-2)' }}>Are you sure you want to delete</p>
+                <p className="text-sm font-semibold mb-5" style={{ color: 'var(--text)' }}>"{selected.name}"?</p>
+                <p className="text-xs mb-6" style={{ color: 'var(--text-3)' }}>This action cannot be undone.</p>
                 <div className="flex gap-2">
-                  <button
-                    onClick={handleDelete}
-                    className="flex-1 py-2.5 rounded-lg text-xs font-semibold"
-                    style={{ background: 'var(--red)', color: '#fff' }}
-                  >
-                    Yes, Delete
-                  </button>
-                  <button
-                    onClick={closeModal}
-                    className="flex-1 py-2.5 rounded-lg text-xs font-semibold"
-                    style={{ background: 'var(--surface2)', color: 'var(--text-2)', border: '1px solid var(--border)' }}
-                  >
-                    Cancel
-                  </button>
+                  <button onClick={handleDelete} className="flex-1 py-2.5 rounded-lg text-xs font-semibold"
+                    style={{ background: 'var(--red)', color: '#fff' }}>Yes, Delete</button>
+                  <button onClick={closeModal} className="flex-1 py-2.5 rounded-lg text-xs font-semibold"
+                    style={{ background: 'var(--surface2)', color: 'var(--text-2)', border: '1px solid var(--border)' }}>Cancel</button>
                 </div>
               </div>
             )}

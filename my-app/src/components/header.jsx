@@ -25,7 +25,7 @@ function Header({ onToggle, onLogout, onToggleTheme, isDark, user }) {
 
   return (
     <header
-      className="bg-gradient-to-l from-bg2 via-bg3 to-bg4 flex items-center gap-3 shrink-0 px-4 h-[52px]"
+      className="bg-gradient-to-l from-bg2 to-bg3 flex items-center gap-3 shrink-0 px-4 h-[60px] transition-all duration-300 ease-in-out"
       style={{borderBottom: '1px solid var(--border)' }}
     >
       {/* Toggle Sidebar */}
@@ -44,9 +44,9 @@ function Header({ onToggle, onLogout, onToggleTheme, isDark, user }) {
         className="flex items-center gap-2 rounded-full px-3 flex-1 max-w-sm h-8"
         style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
       >
-        <span className="material-symbols-rounded" style={{ fontSize: 15, color: 'var(--text-3)' }}>search</span>
+        <span className="text-sm material-symbols-rounded" style={{color: 'var(--text-3)' }}>search</span>
         <input
-          className="bg-transparent text-xs outline-none w-full"
+          className="text-sm bg-transparent outline-none w-full"
           placeholder="Search…"
           style={{ color: 'var(--text)' }}
         />
@@ -56,23 +56,31 @@ function Header({ onToggle, onLogout, onToggleTheme, isDark, user }) {
       <div className="ml-auto flex items-center gap-2">
 
         {/* System Status */}
-        <div
+        {/* <div
           className="hidden sm:flex items-center gap-1.5 rounded-md px-2.5 py-1 text-[11px] font-semibold"
           style={{ background: 'var(--green-dim)', border: '1px solid rgba(34,212,122,0.2)', color: 'var(--green)' }}
         >
           <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: 'var(--green)' }} />
           All Systems Operational
-        </div>
+        </div> */}
 
         {/* Notification */}
         <button
-          className="relative flex items-center justify-center rounded-md w-8 h-8 transition-colors"
-          style={{ color: 'var(--text-2)' }}
+          className="group relative flex items-center justify-center rounded-md w-8 h-8 transition-colors"
+          style={{ color: 'var(--text-4)' }}
           onMouseEnter={e => e.currentTarget.style.background = 'var(--surface)'}
           onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
         >
-          <span className="material-symbols-rounded" style={{ fontSize: 18 }}>notifications</span>
-          <span className="absolute top-1 right-1 w-1.5 h-1.5 rounded-full" style={{ background: 'var(--red)' }} />
+          <span
+            className="material-symbols-rounded text-[var(--text-4)] transition-colors group-hover:text-[var(--text)]"
+            style={{ fontSize: 18 }}
+          >
+            notifications
+          </span>
+          <span
+            className="absolute top-1 right-1 w-1.5 h-1.5 rounded-full"
+            style={{ background: 'var(--red)' }}
+          />
         </button>
 
         {/* Divider */}
@@ -85,7 +93,7 @@ function Header({ onToggle, onLogout, onToggleTheme, isDark, user }) {
           {/* Avatar Button — toggles dropdown */}
           <button
             onClick={() => setDropdownOpen(prev => !prev)}
-            className="flex items-center gap-2 rounded-lg px-2 py-1 transition-colors"
+            className="group flex items-center gap-2 rounded-lg px-2 py-1 transition-colors"
             style={{ color: 'var(--text)' }}
             onMouseEnter={e => e.currentTarget.style.background = 'var(--surface)'}
             onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
@@ -97,21 +105,26 @@ function Header({ onToggle, onLogout, onToggleTheme, isDark, user }) {
             >
               {user?.username?.slice(0, 2).toUpperCase() || 'SA'}
             </div>
+
             {/* Name — hidden on small screens */}
             <div className="hidden sm:block text-left">
-              <div className="text-xs font-semibold leading-tight" style={{ color: 'var(--text)' }}>
+              <div
+                className="text-base font-semibold leading-tight text-[var(--text-4)] transition-colors group-hover:text-[var(--text)]"
+              >
                 {user?.role}
               </div>
-              <div className="text-[10px] leading-tight" style={{ color: 'var(--text-3)' }}>
+              <div
+                className="text-sm leading-tight text-[var(--text-4)] transition-colors group-hover:text-[var(--text-3)]"
+              >
                 {user?.username}
               </div>
             </div>
+
             {/* Chevron */}
             <span
-              className="material-symbols-rounded transition-transform duration-200"
+              className="material-symbols-rounded transition-transform duration-200 text-[var(--text-3)] group-hover:text-[var(--text)]"
               style={{
                 fontSize: 16,
-                color: 'var(--text-3)',
                 transform: dropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)',
               }}
             >
@@ -144,10 +157,10 @@ function Header({ onToggle, onLogout, onToggleTheme, isDark, user }) {
                   {user?.username?.slice(0, 2).toUpperCase() || 'SA'}
                 </div>
                 <div className="min-w-0">
-                  <div className="text-xs font-semibold truncate" style={{ color: 'var(--text)' }}>
+                  <div className="text-base font-semibold truncate" style={{ color: 'var(--text)' }}>
                     {user?.role}
                   </div>
-                  <div className="text-[10px] truncate" style={{ color: 'var(--text-2)' }}>
+                  <div className="text-sm truncate" style={{ color: 'var(--text-2)' }}>
                     {user?.username}
                   </div>
                 </div>

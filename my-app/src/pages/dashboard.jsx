@@ -33,10 +33,10 @@ function Dashboard() {
 
       {/* ── Page Header ── */}
       <div className="mb-6">
-        <h1 className="text-2xl font-bold" style={{ color: 'var(--text)' }}>
+        <h1 className="text-3xl font-bold" style={{ color: 'var(--text-5)' }}>
           Dashboard
         </h1>
-        <p className="text-sm mt-1" style={{ color: 'var(--text-2)' }}>
+        <p className="text-base mt-1" style={{ color: 'var(--text-2)' }}>
           Welcome back, Admin!
         </p>
       </div>
@@ -65,7 +65,7 @@ function Dashboard() {
           className="px-5 py-4"
           style={{ borderBottom: '1px solid var(--border)' }}
         >
-          <h2 className="font-semibold text-sm" style={{ color: 'var(--text)' }}>
+          <h2 className="font-semibold text-base" style={{ color: 'var(--text)' }}>
             Recent Orders
           </h2>
         </div>
@@ -78,7 +78,7 @@ function Dashboard() {
                 {['Order ID', 'Customer', 'Event', 'Type', 'Amount', 'Status'].map(col => (
                   <th
                     key={col}
-                    className="text-left px-4 py-3 text-[11px] font-bold uppercase tracking-wider"
+                    className="text-left px-4 py-3 text-base font-bold uppercase tracking-wider"
                     style={{ color: 'var(--text-2)', borderBottom: '1px solid var(--border)' }}
                   >
                     {col}
@@ -95,19 +95,19 @@ function Dashboard() {
                   onMouseEnter={e => e.currentTarget.style.background = 'var(--surface2)'}
                   onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                 >
-                  <td className="px-4 py-3 text-xs font-mono" style={{ color: 'var(--text-2)' }}>
+                  <td className="px-4 py-3 text-sm font-mono" style={{ color: 'var(--text-2)' }}>
                     {order.id}
                   </td>
-                  <td className="px-4 py-3 text-xs font-medium" style={{ color: 'var(--text)' }}>
+                  <td className="px-4 py-3 text-sm font-medium" style={{ color: 'var(--text)' }}>
                     {order.customer}
                   </td>
-                  <td className="px-4 py-3 text-xs" style={{ color: 'var(--text)' }}>
+                  <td className="px-4 py-3 text-sm" style={{ color: 'var(--text)' }}>
                     {order.event}
                   </td>
-                  <td className="px-4 py-3 text-xs" style={{ color: 'var(--text-2)' }}>
+                  <td className="px-4 py-3 text-sm" style={{ color: 'var(--text-2)' }}>
                     {order.type}
                   </td>
-                  <td className="px-4 py-3 text-xs font-semibold" style={{ color: 'var(--text)' }}>
+                  <td className="px-4 py-3 text-sm font-semibold" style={{ color: 'var(--text)' }}>
                     {order.amount}
                   </td>
                   <td className="px-4 py-3">

@@ -1,25 +1,29 @@
-* { margin: 0; padding: 0; box-sizing: border-box; }
+@import "tailwindcss";
 
+/* ── Your CSS Variables (keep these as-is) ── */
 :root {
-  /* LIGHT MODE (default) */
-  --bg:          #f0f0f4;
-  --bg2:         #ffffff;
+  --bg:          #f8f5eb;
+  --bg2:         #b86e00;
+  --bg3:         #ffe8b6;
+  --bg4:         #fffbf3;
   --surface:     #ffffff;
   --surface2:    #f5f5f8;
   --surface3:    #ebebf0;
-  --border:      #e0e0e8;
+  --border:      #cfcac6;
   --border2:     #d0d0da;
 
-  --accent:      #d4881a;
+  --accent:      #f5a623;
   --accent-dim:  rgba(212,136,26,.10);
   --accent-glow: rgba(212,136,26,.20);
 
-  --text:        #111118;
-  --text-2:      #6b6b80;
-  --text-3:      #a8a8b8;
+  --text:        #b86e00;
+  --text-2:      #413932;
+  --text-3:      #7c6b5a;
+  --text-4:      #ece9db;
+  --text-5:      #f5a623;
 
-  --green:       #12a35a;
-  --green-dim:   rgba(18,163,90,.10);
+  --green:       #15ff8a;
+  --green-dim:   rgba(0, 214, 107, 0.199);
   --red:         #d63f3f;
   --red-dim:     rgba(214,63,63,.10);
   --blue:        #3a6fd8;
@@ -31,17 +35,26 @@
 
   --sidebar-w:   220px;
   --topbar-h:    52px;
-  --radius:      10px;
-  --radius-sm:   6px;
+  --radius:      .5rem;
+  --radius-sm:   .4rem;
 
-  font-size: 13px;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 14px;
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
-/* DARK MODE OVERRIDES */
+/* 
+#292935
+#fbc03e
+#915812
+#f5a623
+*/
+
+/* ── Dark Mode ── */
 :root.Dark {
-  --bg:          #0d0d0f;
-  --bg2:         #111114;
+  --bg:          #1c1c20;
+  --bg2:         #292935;
+  --bg3:         #292935;
+  --bg4:         #111114;
   --surface:     #18181c;
   --surface2:    #1f1f25;
   --surface3:    #26262e;
@@ -54,7 +67,9 @@
 
   --text:        #f0f0f2;
   --text-2:      #9898a8;
-  --text-3:      #55555f;
+  --text-3:      #f1f1fd;
+  --text-4:      #ddddeb;
+  --text-5:      #f5a623;
 
   --green:       #22d47a;
   --green-dim:   rgba(34,212,122,.12);
@@ -68,24 +83,26 @@
   --yellow-dim:  rgba(245,200,66,.12);
 }
 
-
-body {
-  font-family: 'Segoe UI', sans-serif;
-  background-color: args(var(--bg) 1);
-}
-
-.app-layout {
-  display: flex;       /* sidebar + content side by side */
-  min-height: 100vh;
-}
-
-.main-content {
-  flex: 1;             /* takes all remaining space */
-  padding: 24px;
-}
-
-.page-placeholder {
-  background: var(--surface);
-  padding: 40px;
-  border-radius: 12px;
+/* ── Map your variables to Tailwind classes ── */
+/* This lets you use them as Tailwind utilities */
+@theme inline {
+  --color-bg:          var(--bg);
+  --color-bg2:         var(--bg2);
+  --color-bg3:         var(--bg3);
+  --color-bg4:         var(--bg4);
+  --color-surface:     var(--surface);
+  --color-surface2:    var(--surface2);
+  --color-surface3:    var(--surface3);
+  --color-border:      var(--border);
+  --color-accent:      var(--accent);
+  --color-text:        var(--text);
+  --color-text-2:      var(--text-2);
+  --color-text-3:      var(--text-3);
+  --color-text-4:      var(--text-4);
+  --color-text-5:      var(--text-5);
+  --color-green:       var(--green);
+  --color-red:         var(--red);
+  --color-blue:        var(--blue);
+  --color-purple:      var(--purple);
+  --color-yellow:      var(--yellow);
 }
