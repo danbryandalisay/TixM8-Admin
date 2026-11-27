@@ -8,6 +8,7 @@ import Events from './pages/events'
 import Orders from './pages/orders'
 import Users from './pages/users'
 import Login from './pages/login'
+import SeatSelectionPage from './pages/seat-selection'
 
 function ProtectedRoute({ user, children }) {
   if (!user) return <Navigate to="/login" replace />
@@ -53,7 +54,21 @@ function App() {
       <Routes>
         <Route
           path="/login"
-          element={user ? <Navigate to="/" replace /> : <Login onLogin={handleLogin} />}
+          element={
+            user ? <Navigate to="/" replace /> : (
+              // ✅ Pass isDark and toggleTheme to Login so there is ONE
+              //    source of truth for the theme — App.jsx owns it,
+              //    Login just reads and toggles it via props.
+              //
+              //    Before: Login had its own isDark state → got out of sync
+              //    After:  Login uses App.jsx's state → always in sync
+              <Login
+                onLogin={handleLogin}
+                isDark={isDark}
+                onToggleTheme={toggleTheme}
+              />
+            )
+          }
         />
         <Route
           path="/*"
@@ -75,9 +90,19 @@ function App() {
                       <Route path="/events" element={<Events />}    />
                       <Route path="/orders" element={<Orders />}    />
                       <Route path="/users"  element={<Users />}     />
+                      {/*
+                        Seat selection — navigate to this route from your Events page:
+                          navigate('/seat-selection', { state: { event: { id, name, date, time, venue } } })
+                        Then read it in SeatSelection via:
+                          import { useLocation, useNavigate } from 'react-router-dom'
+                          const { state } = useLocation()
+                          const event = state?.event
+                      */}
+                      {/* Seat selection page — receives event from location.state */}
+                      <Route path="/seat-selection" element={<SeatSelectionPage isDark={isDark} />} />
                     </Routes>
                   </main>
-                  <Footer /> 
+                  <Footer />
                 </div>
               </div>
             </ProtectedRoute>
